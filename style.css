@@ -95,7 +95,7 @@ main{
 .tile.reveal{
   color:#fff;
   transform: rotateX(0);
-  animation: flip 500ms ease forwards;
+  animation: flip var(--flip-duration, 500ms) ease forwards;
 }
 @keyframes flip{
   0%{ transform: rotateX(0deg); }
