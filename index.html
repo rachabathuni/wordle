@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Wordle — No-Backend Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="title">WORDLE</div>
+    <div class="controls">
+      <label class="toggle">
+        <input id="hardMode" type="checkbox">
+        <span>Hard Mode</span>
+      </label>
+      <button id="newGameBtn" class="ghost" title="Start a new game">↻</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="board" class="board" aria-label="Word grid" aria-live="polite"></section>
+
+    <section id="keyboard" class="keyboard" aria-label="On-screen keyboard">
+      <div class="kb-row" data-row="row1"></div>
+      <div class="kb-row" data-row="row2"></div>
+      <div class="kb-row" data-row="row3"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="resultDialog" class="modal">
+    <div class="modal-content">
+      <h2 id="resultTitle"></h2>
+      <p id="resultSubtitle"></p>
+      <div class="answer-reveal" id="answerReveal"></div>
+      <div class="modal-actions">
+        <button id="playAgain" class="primary">Play Again</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="words.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
