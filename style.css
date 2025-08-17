@@ -1,16 +1,16 @@
 
 :root{
-  --bg:#121213;
-  --tile-bg:#121213;
-  --tile-border:#3a3a3c;
-  --text:#d7dadc;
-  --key-bg:#818384;
-  --key-text:#ffffff;
+  --bg:#ffffff;
+  --tile-bg:#ffffff;
+  --tile-border:#d3d6da;
+  --text:#000000;
+  --key-bg:#d3d6da;
+  --key-text:#000000;
   --absent:#787c7e;
   --present:#c9b458;
   --correct:#6aaa64;
-  --focus:#565758;
-  --accent:#aaa;
+  --focus:#878a8c;
+  --accent:#565758;
 }
 
 *{box-sizing:border-box}
@@ -142,7 +142,7 @@ main{
 .toast{
   position:fixed;
   top:72px;
-  background:#333;
+  background:#000;
   color:#fff;
   padding:10px 12px;
   border-radius:6px;
@@ -153,7 +153,7 @@ main{
 .toast.show{ opacity:1; transform: translateY(0); }
 
 .modal::backdrop{ background: rgba(0,0,0,.5); }
-.modal{ border:0; border-radius:10px; padding:0; background:#1a1a1b; color:var(--text) }
+.modal{ border:0; border-radius:10px; padding:0; background:#ffffff; color:var(--text) }
 .modal-content{ padding:18px; min-width:280px; max-width:420px }
 .modal-actions{ display:flex; justify-content:flex-end; margin-top:12px }
 .answer-reveal{ margin:8px 0 0 0; font-weight:700; }
