@@ -7,6 +7,8 @@
 
 (() => {
   const ROWS = 6, COLS = 5;
+  const FLIP_MS = (window.WORDLE_CONFIG && window.WORDLE_CONFIG.flipMs) || 300;
+  document.documentElement.style.setProperty('--flip-duration', FLIP_MS + 'ms');
   const boardEl = document.getElementById('board');
   const kbRows = [
     "QWERTYUIOP",
@@ -280,7 +282,7 @@
           if (i === tiles.length - 1) {
             resolve();
           }
-        }, i * 300);
+        }, i * FLIP_MS);
       });
     });
   }
