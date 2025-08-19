@@ -280,7 +280,8 @@
           t.classList.add('reveal', score[i]);
           updateKeyColor(grid[r][i], score[i]);
           if (i === tiles.length - 1) {
-            resolve();
+            // Wait for the final tile's flip animation to finish
+            setTimeout(resolve, FLIP_MS);
           }
         }, i * FLIP_MS);
       });
@@ -318,9 +319,10 @@
 
   function showResult(win, guesses){
     resultTitle.textContent = win ? "You got it!" : "Better luck next time";
-    resultSubtitle.textContent = win ? `Solved in ${guesses} ${guesses===1?'guess':'guesses'}.`
-                                     : "The correct word was:";
-    answerReveal.textContent = win ? "" : answer.toUpperCase();
+    resultSubtitle.textContent = win
+      ? `Solved in ${guesses} ${guesses===1?'guess':'guesses'}. The word was:`
+      : "The correct word was:";
+    answerReveal.textContent = answer.toUpperCase();
     if (!resultDialog.open) resultDialog.showModal();
   }
 
