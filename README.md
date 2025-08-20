@@ -15,3 +15,10 @@ Word lists are bundled in `words.js`, generated from uploaded word files.
 
 ## License
 This project is open source under the MIT License.
+
+## Debugging
+To reveal the current target word during testing, open the browser's developer console and assign any value to the global `REVEAL_ANSWER` variable:
+
+```js
+REVEAL_ANSWER = true; // logs the secret word to the console
+```
