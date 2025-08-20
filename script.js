@@ -328,4 +328,12 @@
 
   // Expose for debugging
   window.__wordle = { get answer(){return answer}, set answer(v){answer=v} };
+
+  // Assigning any value to REVEAL_ANSWER in the console prints the current answer.
+  Object.defineProperty(window, 'REVEAL_ANSWER', {
+    configurable: true,
+    set(v){
+      console.log(`Wordle answer: ${answer.toUpperCase()}`);
+    }
+  });
 })();
