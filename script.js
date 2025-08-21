@@ -8,6 +8,7 @@
 (() => {
   const ROWS = 6, COLS = 5;
   const FLIP_MS = (window.WORDLE_CONFIG && window.WORDLE_CONFIG.flipMs) || 300;
+  const HINT_MS = (window.WORDLE_CONFIG && window.WORDLE_CONFIG.hintMs) || 2000;
   document.documentElement.style.setProperty('--flip-duration', FLIP_MS + 'ms');
   const boardEl = document.getElementById('board');
   const kbRows = [
@@ -23,6 +24,9 @@
   const answerReveal = document.getElementById('answerReveal');
   const playAgain = document.getElementById('playAgain');
   const newGameBtn = document.getElementById('newGameBtn');
+  const hintBtn = document.getElementById('hintBtn');
+  const hintTooltip = document.getElementById('hintTooltip');
+  const ALL_WORDS = Array.from(new Set([...ANSWER_WORDS, ...ALLOWED_WORDS]));
 
   // Game state
   let answer = chooseAnswer();
@@ -34,6 +38,7 @@
   const minCounts = {}; // letter -> minimal known count from hints
   let modeLocked = false;
   let finished = false;
+  let hintHideTimeout;
 
   // Build board
   for (let r = 0; r < ROWS; r++) {
@@ -82,6 +87,19 @@
     if (/^[A-Z]$/.test(k)) handleKey(k);
   });
 
+  hintBtn.addEventListener('click', () => {
+    if (finished) return;
+    const word = generateHintWord();
+    if (!word){
+      showToast("No hints available");
+      return;
+    }
+    hintTooltip.textContent = word.toUpperCase();
+    hintTooltip.classList.add('show');
+    clearTimeout(hintHideTimeout);
+    hintHideTimeout = setTimeout(() => hintTooltip.classList.remove('show'), HINT_MS);
+  });
+
   newGameBtn.addEventListener('click', () => resetGame());
   playAgain.addEventListener('click', () => {
     resultDialog.close();
@@ -107,6 +125,8 @@
     });
     // re-enable hard mode toggle
     hardModeInput.disabled = false;
+    hintTooltip.classList.remove('show');
+    clearTimeout(hintHideTimeout);
     showToast("New game started");
   }
 
@@ -324,6 +344,37 @@
       : "The correct word was:";
     answerReveal.textContent = answer.toUpperCase();
     if (!resultDialog.open) resultDialog.showModal();
+  }
+
+  // Hint generation (algorithm is modular for easy tweaking)
+  const STARTER_WORDS = ['irate','arise','raise','adieu','aisle'];
+
+  function generateHintWord(){
+    if (row === 0 && col === 0){
+      return STARTER_WORDS[Math.floor(Math.random() * STARTER_WORDS.length)];
+    }
+    const tried = new Set();
+    for (let r=0; r<row; r++) tried.add(grid[r].join(""));
+    const candidates = ALL_WORDS.filter(w => !tried.has(w) && satisfiesKnowledge(w));
+    if (candidates.length === 0) return null;
+    return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+
+  function satisfiesKnowledge(word){
+    for (let i=0;i<COLS;i++){
+      if (fixedPos[i] && word[i] !== fixedPos[i]) return false;
+    }
+    for (const [ch, posSet] of Object.entries(bannedPos)){
+      for (const p of posSet){
+        if (word[p] === ch) return false;
+      }
+    }
+    const counts = {};
+    for (const ch of word) counts[ch] = (counts[ch]||0)+1;
+    for (const [ch, n] of Object.entries(minCounts)){
+      if ((counts[ch]||0) < n) return false;
+    }
+    return true;
   }
 
   // Expose for debugging
