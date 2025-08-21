@@ -36,6 +36,7 @@
   const fixedPos = Array(COLS).fill(null); // greens per position
   const bannedPos = {}; // letter -> Set(positions) for yellow positions
   const minCounts = {}; // letter -> minimal known count from hints
+  const absentLetters = new Set(); // letters confirmed absent from the answer
   let modeLocked = false;
   let finished = false;
   let hintHideTimeout;
@@ -113,6 +114,7 @@
     Object.keys(minCounts).forEach(k=>delete minCounts[k]);
     for (let i=0;i<COLS;i++) fixedPos[i] = null;
     for (const k of Object.keys(bannedPos)) delete bannedPos[k];
+    absentLetters.clear();
     // clear tiles
     document.querySelectorAll('.row').forEach(r => r.classList.remove('shake'));
     document.querySelectorAll('.tile').forEach(t => {
@@ -286,9 +288,17 @@
         seen[ch] = (seen[ch]||0)+1;
       }
     }
-    // Update minimal counts
+    // Update minimal counts and clear absents
     for (const [ch, n] of Object.entries(seen)){
       minCounts[ch] = Math.max(minCounts[ch]||0, n);
+      absentLetters.delete(ch);
+    }
+    // Mark absent letters
+    for (let i=0;i<COLS;i++){
+      const ch = guess[i];
+      if (score[i] === 'absent' && !minCounts[ch]){
+        absentLetters.add(ch);
+      }
     }
   }
 
@@ -361,6 +371,9 @@
     }
 
   function satisfiesKnowledge(word){
+    for (const ch of absentLetters){
+      if (word.includes(ch)) return false;
+    }
     for (let i=0;i<COLS;i++){
       if (fixedPos[i] && word[i] !== fixedPos[i]) return false;
     }
