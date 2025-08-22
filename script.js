@@ -89,6 +89,7 @@
   });
 
   hintBtn.addEventListener('click', () => {
+    setTimeout(() => hintBtn.blur(), 0);
     if (finished) return;
     if (hintTooltip.classList.contains('show')) return;
     const word = generateHintWord();
