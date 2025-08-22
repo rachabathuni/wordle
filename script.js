@@ -88,8 +88,7 @@
     if (/^[A-Z]$/.test(k)) handleKey(k);
   });
 
-  hintBtn.addEventListener('click', () => {
-    setTimeout(() => hintBtn.blur(), 0);
+  function showHint(){
     if (finished) return;
     if (hintTooltip.classList.contains('show')) return;
     const word = generateHintWord();
@@ -101,6 +100,13 @@
     hintTooltip.classList.add('show');
     clearTimeout(hintHideTimeout);
     hintHideTimeout = setTimeout(() => hintTooltip.classList.remove('show'), HINT_MS);
+    setTimeout(() => hintBtn.blur(), 0);
+  }
+
+  hintBtn.addEventListener('click', showHint);
+  hintBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    showHint();
   });
 
   newGameBtn.addEventListener('click', () => resetGame());
