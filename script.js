@@ -375,8 +375,10 @@
     for (let r=0; r<row; r++) tried.add(grid[r].join(""));
     const candidates = ALL_WORDS.filter(w => !tried.has(w) && satisfiesKnowledge(w));
     if (candidates.length === 0) return null;
-    return candidates[Math.floor(Math.random() * candidates.length)];
-    }
+    const unique = candidates.filter(w => new Set(w).size === w.length);
+    const pool = unique.length ? unique : candidates;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
 
   function satisfiesKnowledge(word){
     for (const ch of absentLetters){
