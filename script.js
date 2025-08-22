@@ -90,6 +90,7 @@
 
   hintBtn.addEventListener('click', () => {
     if (finished) return;
+    if (hintTooltip.classList.contains('show')) return;
     const word = generateHintWord();
     if (!word){
       showToast("No hints available");
