@@ -345,6 +345,8 @@
     // trigger reflow
     void rowEl.offsetWidth;
     rowEl.classList.add('shake');
+    // Remove the shake class after the animation so future flips work
+    rowEl.addEventListener('animationend', () => rowEl.classList.remove('shake'), { once: true });
   }
 
   let toastTimeout;
